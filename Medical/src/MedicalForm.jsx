@@ -17,6 +17,7 @@ const MedicalForm = () => {
   const [medications, setMedications] = useState([]);
   const [date, setDate] = useState("");
   const [doctor, setDoctor] = useState("");
+  const [patientID, setPatientID] = useState(""); // New Patient ID state
   const [complaint, setComplaint] = useState("");
   const [observation, setObservation] = useState("");
   const [diagnosis, setDiagnosis] = useState("");
@@ -70,6 +71,7 @@ const MedicalForm = () => {
   // Save prescription data to backend
   const savePrescription = async () => {
     const prescriptionData = {
+      patientID,
       date,
       doctor,
       complaint,
@@ -114,6 +116,8 @@ const MedicalForm = () => {
       doc.setFont("helvetica", "bold");
       doc.text("Medical Prescription", 80, 10);
       doc.setFontSize(12);
+      doc.text(`Patient ID: ${patientID || "N/A"}`, 10, 40); // Add Patient ID in PDF
+      doc.text(`Complaint: ${complaint || "N/A"}`, 10, 50);
       doc.text(`Date: ${date || "N/A"}`, 10, 20);
       doc.text(`Doctor: ${doctor || "N/A"}`, 10, 30);
       doc.text(`Complaint: ${complaint || "N/A"}`, 10, 40);
@@ -148,6 +152,10 @@ const MedicalForm = () => {
       <form>
         <label>Date:</label>
         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+
+        <label>Patient ID:</label> {/* New Field */}
+        <input type="text" value={patientID} onChange={(e) => setPatientID(e.target.value)} placeholder="Enter Patient ID" />
+
 
         <label>Doctor:</label>
         <input type="text" value={doctor} onChange={(e) => setDoctor(e.target.value)} placeholder="Doctor's Name" />

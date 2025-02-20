@@ -1,10 +1,11 @@
- 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./Login"; // Import the new login page
+import Login from "./Login";
 import MedicalForm from "./MedicalForm";
 import DoctorLogin from "./DoctorLogin";
 import NurseLogin from "./NurseLogin";
-import PatientRegister from "./PatientRegister"; // Import new page
+import PatientRegister from "./PatientRegister";
+import PatientDetails from "./PatientDetails"; // ✅ Import new page
+
 import "./App.css";
 
 function App() {
@@ -16,7 +17,8 @@ function App() {
           <Route path="/doctor-login" element={<DoctorLogin />} />
           <Route path="/nurse-login" element={<NurseLogin />} />
           <Route path="/medical-form" element={<MedicalForm />} />
-          <Route path="/patient-register" element={<PatientRegister />} /> {/* New route for nurse */}
+          <Route path="/patient-register" element={<PatientRegister />} />
+          <Route path="/patient-details" element={<PatientDetails />} /> {/* ✅ New Route */}
         </Routes>
       </div>
     </Router>
@@ -24,3 +26,4 @@ function App() {
 }
 
 export default App;
+

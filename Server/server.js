@@ -74,15 +74,15 @@ dotenv.config(); // Load environment variables
 
 const app = express();
 
-// 🔹 CORS Configuration (Handles multiple origins)
+// CORS Configuration
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',')
-  : ['http://localhost:5173']; // Default frontend URL
+  : ['http://localhost:5173'];
 
 app.use(cors({ origin: allowedOrigins, methods: ['GET', 'POST'] }));
 app.use(express.json()); // Enable JSON body parsing
 
-// 🔹 Create a MySQL connection pool
+// Create MySQL connection pool
 const db = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
@@ -94,20 +94,37 @@ const db = mysql.createPool({
   multipleStatements: true
 });
 
-// 🔹 Promisify MySQL queries for async/await support
+// Promisify MySQL queries
 const query = promisify(db.query).bind(db);
 
-// 🔹 Check the database connection
+// Check database connection
 db.getConnection((err, connection) => {
   if (err) {
     console.error('❌ Database connection failed:', err.message);
-    process.exit(1); // Exit process on failure
+    process.exit(1);
   }
   console.log('✅ Connected to MySQL database.');
   connection.release();
 });
 
-// 🔹 API to search medicines
+// API to search for a patient by ID
+app.get('/get-patient/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const sql = 'SELECT * FROM patientsfull WHERE patient_id = ?';
+    const results = await query(sql, [id]);
+    
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
+    res.json(results[0]);
+  } catch (err) {
+    console.error('❌ Error fetching patient details:', err.message);
+    res.status(500).json({ error: 'Database error, unable to fetch patient details.' });
+  }
+});
+
+// API to search medicines
 app.get('/search-medicine', async (req, res) => {
   const searchQuery = req.query.q;
   if (!searchQuery) return res.json([]);
@@ -122,7 +139,7 @@ app.get('/search-medicine', async (req, res) => {
   }
 });
 
-// 🔹 API to store prescription data in MySQL
+// API to save prescription data
 app.post('/save-prescription', async (req, res) => {
   const { date, doctor, complaint, observation, diagnosis, medications } = req.body;
 
@@ -131,17 +148,14 @@ app.post('/save-prescription', async (req, res) => {
   }
 
   try {
-    // Insert prescription details
     const prescriptionSql = 'INSERT INTO prescriptions (date, doctor, complaint, observation, diagnosis) VALUES (?, ?, ?, ?, ?)';
     const prescriptionResult = await query(prescriptionSql, [date, doctor, complaint, observation, diagnosis]);
     const prescriptionId = prescriptionResult.insertId;
 
-    // Insert medications into `prescription_medicines` table
     const medicationSql = 'INSERT INTO prescription_medicines (prescription_id, medicine, dosage, days, quantity, remark) VALUES ?';
     const medicationValues = medications.map(med => [prescriptionId, med.medicine, med.dosage, med.days, med.quantity, med.remark]);
 
     await query(medicationSql, [medicationValues]);
-
     res.status(201).json({ message: 'Prescription saved successfully!' });
   } catch (err) {
     console.error('❌ Error saving prescription:', err.message);
@@ -149,7 +163,7 @@ app.post('/save-prescription', async (req, res) => {
   }
 });
 
-// 🔹 API to retrieve all prescriptions
+// API to retrieve all prescriptions
 app.get('/get-prescriptions', async (req, res) => {
   try {
     const sql = `
@@ -160,7 +174,6 @@ app.get('/get-prescriptions', async (req, res) => {
     `;
     const results = await query(sql);
 
-    // Group medications under their respective prescriptions
     const prescriptions = results.reduce((acc, row) => {
       if (!acc[row.id]) {
         acc[row.id] = {
@@ -192,8 +205,10 @@ app.get('/get-prescriptions', async (req, res) => {
   }
 });
 
-// 🔹 Start the Express server
+// Start the Express server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+
+ 
