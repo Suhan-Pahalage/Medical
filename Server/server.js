@@ -1,69 +1,3 @@
-/*import express from 'express';
-import mysql from 'mysql';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import { promisify } from 'util';
-
-dotenv.config(); // Load environment variables
-
-const app = express();
-
-// 🔹 CORS Configuration (Handles multiple origins)
-const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(',')
-  : ['http://localhost:5173']; // Default frontend URL
-
-app.use(cors({ origin: allowedOrigins, methods: ['GET', 'POST'] }));
-app.use(express.json()); // Enable JSON body parsing
-
-// 🔹 Create a MySQL connection pool
-const db = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_DATABASE || 'medical_db',
-  connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT) || 10,
-  waitForConnections: true,
-  queueLimit: 0,
-  multipleStatements: true
-});
-
-// 🔹 Promisify MySQL queries for async/await support
-const query = promisify(db.query).bind(db);
-
-// 🔹 Check the database connection
-db.getConnection((err, connection) => {
-  if (err) {
-    console.error('❌ Database connection failed:', err.message);
-    process.exit(1); // Exit process on failure
-  }
-  console.log('✅ Connected to MySQL database.');
-  connection.release();
-});
-
-// 🔹 API to search medicines (Secure & Optimized)
-app.get('/search-medicine', async (req, res) => {
-  const searchQuery = req.query.q;
-  if (!searchQuery) return res.json([]); // Return empty if no input
-
-  try {
-    const sql = 'SELECT name FROM medicines WHERE name LIKE ? LIMIT 10';
-    const results = await query(sql, [`%${searchQuery}%`]);
-
-    res.json(results.map((row) => row.name)); // Send only medicine names
-  } catch (err) {
-    console.error('❌ Database query error:', err.message);
-    res.status(500).json({ error: 'Database query failed. Please try again later.' });
-  }
-});
-
-// 🔹 Start the Express server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
-*/
-
 import express from 'express';
 import mysql from 'mysql';
 import cors from 'cors';
@@ -109,17 +43,23 @@ db.getConnection((err, connection) => {
 
 // API to search for a patient by ID
 app.get('/get-patient/:id', async (req, res) => {
-  const { id } = req.params;
+  const id = parseInt(req.params.id, 10); // Convert to integer
+
+  if (isNaN(id)) {
+    return res.status(400).json({ error: 'Invalid patient ID format' });
+  }
+
   try {
     const sql = 'SELECT * FROM patientsfull WHERE patient_id = ?';
     const results = await query(sql, [id]);
-    
+
     if (results.length === 0) {
       return res.status(404).json({ error: 'Patient not found' });
     }
+
     res.json(results[0]);
   } catch (err) {
-    console.error('❌ Error fetching patient details:', err.message);
+    console.error('❌ Error fetching patient details:', err);
     res.status(500).json({ error: 'Database error, unable to fetch patient details.' });
   }
 });
@@ -143,7 +83,7 @@ app.get('/search-medicine', async (req, res) => {
 app.post('/save-prescription', async (req, res) => {
   const { date, doctor, complaint, observation, diagnosis, medications } = req.body;
 
-  if (!date || !doctor || !complaint || !observation || !diagnosis || !medications.length) {
+  if (!date || !doctor || !complaint || !observation || !diagnosis || !Array.isArray(medications) || medications.length === 0) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
@@ -210,5 +150,6 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+
 
  

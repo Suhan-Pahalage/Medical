@@ -1,40 +1,119 @@
+ /* Patient Details Container */
 .patient-details-container {
-    text-align: center;
-    padding: 20px;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Patient Details Section (for the patient data) */
+.patient-details {
+  max-width: 650px;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 12px;
+  background: linear-gradient(to bottom, #f7f7f7, #e6f7ff);
+  border: 2px solid #007bff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+/* Heading Style for Patient Details */
+.patient-details h3 {
+  font-size: 26px;
+  color: #007bff;
+  margin-bottom: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Paragraph Style for Each Patient Detail */
+.patient-details p {
+  font-size: 16px;
+  color: #333;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0, 123, 255, 0.2);
+}
+
+/* Remove Border for Last Paragraph */
+.patient-details p:last-child {
+  border-bottom: none;
+}
+
+/* Styling for Strong Text (labels like Full Name, Date of Birth, etc.) */
+.patient-details strong {
+  color: #0056b3;
+}
+
+/* Input Field Styling */
+input {
+  width: 250px;
+  padding: 10px;
+  margin: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Button Styling */
+button {
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Error Message Styling */
+.error {
+  color: red;
+  font-size: 14px;
+}
+
+/* Wide Text Box (For notes, description, etc.) */
+.wide-text-box {
+  width: 80%;
+  height: 200px;
+  margin-top: 20px;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.back-button {
+  margin-top: 20px;
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #28a745; /* Green color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+  width: fit-content;
+  margin: 20px auto;
+  transition: background 0.3s ease-in-out;
+}
+
+.back-button:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+  .patient-details {
+    width: 90%;
+    padding: 15px;
   }
-  
-  input {
-    width: 250px;
-    padding: 10px;
-    margin: 10px;
-    font-size: 16px;
+
+  input, .wide-text-box {
+    width: 90%;
   }
-  
-  button {
-    padding: 10px 15px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  .error {
-    color: red;
-    font-size: 14px;
-  }
-  
-  .wide-text-box {
-    width: 80%;
-    height: 200px;
-    margin-top: 20px;
-    padding: 10px;
-    font-size: 16px;
-    background-color: #f8f9fa;
-    border: 1px solid #ccc;
-  }
-  
+}

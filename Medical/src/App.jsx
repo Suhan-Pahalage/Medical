@@ -5,6 +5,8 @@ import DoctorLogin from "./DoctorLogin";
 import NurseLogin from "./NurseLogin";
 import PatientRegister from "./PatientRegister";
 import PatientDetails from "./PatientDetails"; // ✅ Import new page
+import Qdetails from "./Qdetails";
+import DoctorDashboard from "./DoctorDashboard"; // Import Dashboard
 
 import "./App.css";
 
@@ -15,10 +17,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/doctor-login" element={<DoctorLogin />} />
+          <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
           <Route path="/nurse-login" element={<NurseLogin />} />
           <Route path="/medical-form" element={<MedicalForm />} />
           <Route path="/patient-register" element={<PatientRegister />} />
           <Route path="/patient-details" element={<PatientDetails />} /> {/* ✅ New Route */}
+          <Route path = "/q-details" element = {<Qdetails/>}/>
         </Routes>
       </div>
     </Router>

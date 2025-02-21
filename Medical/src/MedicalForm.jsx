@@ -209,6 +209,13 @@ const MedicalForm = () => {
       <button onClick={() => navigate("/")} className="back-button">
         Back to Main Menu
       </button>
+
+    {/* Back to Doctor Dashboard Button */}
+    <button onClick={() => navigate("/doctor-dashboard")} className="back-button">
+        Back to Doctor Dashboard
+      </button>
+
+
     </div>
   );
 };

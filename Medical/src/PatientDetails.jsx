@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import './PatientDetails.css';
+
 
 const PatientDetails = () => {
   const [patientId, setPatientId] = useState("");
   const [patientData, setPatientData] = useState(null);
   const [error, setError] = useState("");
+
+  const navigate = useNavigate(); // Define navigate here
+
 
   const handleSearch = async () => {
     if (!patientId) {
@@ -50,6 +56,10 @@ const PatientDetails = () => {
           <p><strong>Emergency Contact:</strong> {patientData.emergency_contact_phone}</p>
         </div>
       )}
+
+<button onClick={() => navigate("/doctor-dashboard")} className="back-button">
+        Back to Doctor Dashboard
+      </button>
     </div>
   );
 };
