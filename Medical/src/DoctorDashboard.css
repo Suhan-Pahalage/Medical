@@ -1,0 +1,160 @@
+/* General Styles */
+h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Doctor Dashboard Container */
+.doctor-dashboard {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.265); /* Transparent white background */
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  color: #333; /* Change text color back to dark for better readability */
+}
+
+/* Button Container */
+.button-container {
+  display: flex;
+  flex-direction: column;  /* Stack buttons vertically */
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  align-items: center;   /* Center the buttons horizontally */
+}
+
+/* Button Styling */
+.dashboard-button {
+  background-color: #0d0951;
+  color: white;
+  font-size: 1rem;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 200px;
+}
+
+.dashboard-button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+.dashboard-button:focus {
+  outline: none;
+}
+
+/* Back Button Styling */
+.back-button {
+  background-color: #007BFF;
+  color: white;
+  padding: 12px 24px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 1rem;
+  width: 100px;
+}
+
+.back-button23 {
+  background-color: #007BFF;
+  color: white;
+  padding: 12px 24px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 1rem;  /* Ensures the second button has space below */
+  width: 100px;
+}
+
+.back-button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.back-button:focus {
+  outline: none;
+}
+
+.back-button23:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.back-button23:focus {
+  outline: none;
+}
+
+/* Mobile-Friendly Design */
+@media (max-width: 768px) {
+  .doctor-dashboard {
+      padding: 1rem;
+  }
+
+  .button-container {
+      flex-direction: column;
+      gap: 1rem;
+  }
+
+  .dashboard-button,
+  .back-button,
+  .back-button23 {
+      width: 100%;
+      max-width: 300px;
+  }
+}
+
+ 
+.back-buttonmain:hover {
+  background-color: #0056b3;
+}
+
+.back-buttondash {
+  position: absolute;
+  flex-direction: row;
+  top: 20px; /* Adjust top spacing */
+  right: 10px; /* Adjust left spacing */
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007BFF; /* Adjust the background color */
+  border: 1px solid #ccc; /* Add border if necessary */
+  border-radius: 5px;
+  cursor: pointer;
+}
+.back-buttonmain {
+  position: absolute;
+  top: 20px; /* Adjust top spacing */
+  right: 110px; /* Adjust right spacing */
+  background-color: #007bff; /* Keep the same primary color */
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 1px solid #ccc; /* Optional border */
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+ 
+
+
+.back-buttondash:hover {
+  background-color: #0056b3; /* Change color on hover */
+}
+

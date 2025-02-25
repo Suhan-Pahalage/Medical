@@ -7,6 +7,8 @@ import PatientRegister from "./PatientRegister";
 import PatientDetails from "./PatientDetails"; // ✅ Import new page
 import Qdetails from "./Qdetails";
 import DoctorDashboard from "./DoctorDashboard"; // Import Dashboard
+import HistoryView from "./HistoryView";
+
 
 import "./App.css";
 
@@ -23,6 +25,7 @@ function App() {
           <Route path="/patient-register" element={<PatientRegister />} />
           <Route path="/patient-details" element={<PatientDetails />} /> {/* ✅ New Route */}
           <Route path = "/q-details" element = {<Qdetails/>}/>
+          <Route path="/history-view" element={<HistoryView />} />
         </Routes>
       </div>
     </Router>

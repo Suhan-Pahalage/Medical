@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+
 import "./Login.css"; // Ensure CSS styling
 
 const Login = () => {
@@ -11,9 +12,9 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <h1>Welcome to the Medical System</h1>
-      <p>Select your role:</p>
+    <div className="glass-container">
+      <h1>Welcome to the CareAlart Medical System</h1>
+      
 
       <div className="button-container">
         <button className="login-button doctor" onClick={() => navigate("/doctor-login")}>

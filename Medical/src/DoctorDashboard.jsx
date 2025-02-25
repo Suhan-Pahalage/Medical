@@ -1,18 +1,30 @@
 import { useNavigate } from "react-router-dom";
+import './DoctorDashboard.css';
 
 const DoctorDashboard = () => {
   const navigate = useNavigate();
 
   return (
-    <div>
-      <h2>Doctor Dashboard</h2>
-      <button onClick={() => navigate("/patient-details")}>Patient Details</button>
-      <button onClick={() => navigate("/q-details")}>Q-Details</button>
-      <button onClick={() => navigate("/medical-form")}>Prescription</button>
-      <button className="back-button" onClick={() => navigate("/")}>
-        ⬅ Back to Main Menu
+    <div className="doctor-dashboard">
+      <h2 className="dashboard-title"></h2>
+      <div className="button-container">
+        <button className="dashboard-button" onClick={() => navigate("/patient-details")}>
+          Patient Details
+        </button>
+        <button className="dashboard-button" onClick={() => navigate("/q-details")}>
+          Q-Details
+        </button>
+        <button className="dashboard-button" onClick={() => navigate("/medical-form")}>
+          Prescription
+        </button>
+      </div>
+      <button className="back-buttonmain" onClick={() => navigate("/")}>
+        Main Menu
       </button>
-
+      <button className="back-buttondash" onClick={() => navigate("/doctor-login")}>
+  Back
+</button>
+      
     </div>
   );
 };

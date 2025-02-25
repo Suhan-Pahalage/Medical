@@ -23,14 +23,18 @@ const PatientDetails = () => {
       setPatientData(response.data);
       setError(""); // Clear previous errors
     } catch (err) {
-      setError("Patient not found or database error.");
-      setPatientData(null);
+      alert("Patient ID not foud or Invalid");
+      //setError("Patient not found or database error.");
+      //setPatientData(null);
     }
   };
 
   return (
-    <div>
-      <h2>Search Patient Details</h2>
+    <div className="patient-details-container" >
+      <h2 style={{ color: "white", textAlign: "center", marginBottom: "20px" }}>
+  Search Patient Details
+</h2>
+      <div className="search-container">
       <input
         type="text"
         placeholder="Enter Patient ID"
@@ -38,8 +42,8 @@ const PatientDetails = () => {
         onChange={(e) => setPatientId(e.target.value)}
       />
       <button onClick={handleSearch}>Search</button>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        </div>
+        {error && <p style={{ color: "white", fontSize: "12px" }}>{error}</p>}
 
       {patientData && (
         <div className="patient-details">
@@ -57,9 +61,42 @@ const PatientDetails = () => {
         </div>
       )}
 
-<button onClick={() => navigate("/doctor-dashboard")} className="back-button">
-        Back to Doctor Dashboard
-      </button>
+<button
+  onClick={() => navigate("/doctor-dashboard")}
+  className="back-button88"
+  style={{
+    position: "absolute",  // To position the button in a specific place
+    top: "20px",           // Distance from the top
+    right: "20px",         // Distance from the right
+    padding: "10px 20px",
+    backgroundColor: "#2196f3", // Green background (you can change this)
+    color: "white",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer"
+  }}
+>
+  Back
+</button>
+
+<button
+  onClick={() => navigate("/")}
+  className="back-button88"
+  style={{
+    position: "absolute",  // To position the button in a specific place
+    top: "70px",           // Distance from the top
+    right: "20px",         // Distance from the right
+    padding: "10px 20px",
+    backgroundColor: "#2196f3", // Green background (you can change this)
+    color: "white",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer"
+  }}
+>
+  Main Menu
+</button>
+
     </div>
   );
 };

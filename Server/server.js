@@ -41,6 +41,126 @@ db.getConnection((err, connection) => {
   connection.release();
 });
 
+
+ // API to fetch all past prescriptions for a patient
+/*app.get('/history', async (req, res) => {
+  const { patientID } = req.query;
+
+  if (!patientID) {
+    console.log("❌ Missing Patient ID");
+    return res.status(400).json({ error: "Patient ID is required" });
+  }
+
+  console.log(`🔍 Fetching history for Patient ID: ${patientID}`);
+
+  const sql = `
+    SELECT p.patientID, p.date, p.doctor, p.complaint, p.observation, p.diagnosis,
+           pm.medicine, pm.dosage, pm.days, pm.quantity, pm.remark
+    FROM prescriptions p
+    JOIN prescription_medicines pm ON p.prescription_id = pm.prescription_id
+    WHERE p.patientID = ?
+    ORDER BY p.date DESC;
+  `;
+
+  try {
+    console.log("🚀 Executing query:", sql);
+    const rows = await query(sql, [patientID]);
+
+    if (rows.length === 0) {
+      console.log("⚠️ No history found for Patient ID:", patientID);
+      return res.status(404).json({ error: "No history found" });
+    }
+
+    console.log("✅ Query result:", rows);
+    return res.json(rows);
+  } catch (error) {
+    console.error("❌ Error fetching history:", error);
+    return res.status(500).json({ error: "Failed to fetch history" });
+  }
+});*/
+// API to fetch all past prescriptions for a patient
+app.get('/history', async (req, res) => {
+  const { patientID } = req.query;
+
+  if (!patientID) {
+    console.log("❌ Missing Patient ID");
+    return res.status(400).json({ error: "Patient ID is required" });
+  }
+
+  console.log(`🔍 Fetching history for Patient ID: ${patientID}`);
+
+  const sql = `
+    SELECT p.prescription_id, p.date, p.doctor, p.complaint, p.observation, p.diagnosis,
+           pm.medicine, pm.dosage, pm.days, pm.quantity, pm.remark
+    FROM prescriptions p
+    JOIN prescription_medicines pm ON p.prescription_id = pm.prescription_id
+    WHERE p.patientID = ?
+    ORDER BY p.date DESC;
+  `;
+
+  try {
+    console.log("🚀 Executing query:", sql);
+    const rows = await query(sql, [patientID]);
+
+    if (rows.length === 0) {
+      console.log("⚠️ No history found for Patient ID:", patientID);
+      return res.status(404).json({ error: "No history found" });
+    }
+
+    // Transform the flat response into a nested structure
+    const groupedData = rows.reduce((acc, row) => {
+      const existingEntry = acc.find(
+        (entry) => entry.prescription_id === row.prescription_id
+      );
+
+      if (existingEntry) {
+        existingEntry.medicines.push({
+          medicine: row.medicine,
+          dosage: row.dosage,
+          days: row.days,
+          quantity: row.quantity,
+          remark: row.remark,
+        });
+      } else {
+        acc.push({
+          prescription_id: row.prescription_id,
+          date: row.date,
+          doctor: row.doctor,
+          complaint: row.complaint,
+          observation: row.observation,
+          diagnosis: row.diagnosis,
+          medicines: [
+            {
+              medicine: row.medicine,
+              dosage: row.dosage,
+              days: row.days,
+              quantity: row.quantity,
+              remark: row.remark,
+            },
+          ],
+        });
+      }
+      return acc;
+    }, []);
+
+    console.log("✅ Transformed query result:", groupedData);
+    return res.json(groupedData);
+  } catch (error) {
+    console.error("❌ Error fetching history:", error);
+    return res.status(500).json({ error: "Failed to fetch history" });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
 // API to search for a patient by ID
 app.get('/get-patient/:id', async (req, res) => {
   const id = parseInt(req.params.id, 10); // Convert to integer
@@ -79,29 +199,89 @@ app.get('/search-medicine', async (req, res) => {
   }
 });
 
-// API to save prescription data
-app.post('/save-prescription', async (req, res) => {
-  const { date, doctor, complaint, observation, diagnosis, medications } = req.body;
 
-  if (!date || !doctor || !complaint || !observation || !diagnosis || !Array.isArray(medications) || medications.length === 0) {
+// API to handle patient registration
+app.post('/register-patient', async (req, res) => {
+  const {
+    patient_id,  // Manually entered Primary Key
+    patientName,
+    dob,
+    email,
+    age,
+    gender,
+    bloodType,
+    allergies,
+    existingConditions,
+    emergencyContact,
+    address
+  } = req.body;
+
+  // ✅ Validate required fields
+  if (!patient_id || !patientName || !dob || !email || !age || !gender || !emergencyContact || !address) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
   try {
-    const prescriptionSql = 'INSERT INTO prescriptions (date, doctor, complaint, observation, diagnosis) VALUES (?, ?, ?, ?, ?)';
-    const prescriptionResult = await query(prescriptionSql, [date, doctor, complaint, observation, diagnosis]);
-    const prescriptionId = prescriptionResult.insertId;
+    // ✅ Insert into the patientsfull table
+    const sql = `INSERT INTO patientsfull1 (patient_id, patientName, dob, email, age, gender, bloodType, allergies, existingConditions, emergencyContact, address) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-    const medicationSql = 'INSERT INTO prescription_medicines (prescription_id, medicine, dosage, days, quantity, remark) VALUES ?';
-    const medicationValues = medications.map(med => [prescriptionId, med.medicine, med.dosage, med.days, med.quantity, med.remark]);
+    await query(sql, [patient_id, patientName, dob, email, age, gender, bloodType, allergies, existingConditions, emergencyContact, address]);
 
-    await query(medicationSql, [medicationValues]);
-    res.status(201).json({ message: 'Prescription saved successfully!' });
+    res.status(201).json({ message: 'Patient registered successfully!' });
+  } catch (err) {
+    if (err.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({ error: 'A patient with this ID already exists.' });
+    }
+    console.error('❌ Database error:', err.message);
+    res.status(500).json({ error: 'Database error, unable to register patient.' });
+  }
+});
+
+
+
+
+
+ 
+// API to save prescription data
+ 
+app.post('/save-prescription', async (req, res) => {
+  const { patientID, date, doctor, complaint, observation, diagnosis, medications } = req.body;
+
+  console.log("Received patientID:", patientID);
+
+  // Validate required fields
+  if (!patientID || !date || !doctor || !complaint || !observation || !diagnosis || !Array.isArray(medications) || medications.length === 0) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+  
+  try {
+    const prescriptionSql = `INSERT INTO prescriptions (patientID, date, doctor, complaint, observation, diagnosis) VALUES (?, ?, ?, ?, ?, ?)`;
+    const prescriptionResult = await query(prescriptionSql, [patientID, date, doctor, complaint, observation, diagnosis]);
+
+    const prescriptionId = prescriptionResult.insertId; // ✅ Fix: Assign prescriptionId
+
+    console.log('✅ Prescription Inserted:', prescriptionResult);
+
+    // Insert medication data if medications exist
+    if (medications.length > 0) {
+      const medicationSql = `INSERT INTO prescription_medicines (prescription_id, medicine, dosage, days, quantity, remark) VALUES ?`;
+      const medicationValues = medications.map(med => [prescriptionId, med.medicine, med.dosage, med.days, med.quantity, med.remark]);
+
+      await query(medicationSql, [medicationValues]);
+      console.log("✅ Medications inserted successfully");
+    }
+
+    res.status(201).json({ message: 'Prescription saved successfully!', prescriptionId }); // ✅ Send response only once
+
   } catch (err) {
     console.error('❌ Error saving prescription:', err.message);
     res.status(500).json({ error: 'Database error, unable to save prescription.' });
   }
 });
+
+
+
 
 // API to retrieve all prescriptions
 app.get('/get-prescriptions', async (req, res) => {
