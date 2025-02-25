@@ -2,7 +2,7 @@
   
     width: 350px;
     margin-top: 20px;
-    padding-top: 50%;
+    padding-top: 100%;
     border: 1px solid #ddd;
     border-radius: 8px;
     background: #bfddf33a;
@@ -17,6 +17,9 @@
   
   .logo {
     width: 80px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     height: auto;
   }
   
@@ -183,4 +186,8 @@ label {
 
 .back-buttondoc:hover {
   background-color: #0056b3;
+}
+
+.history-entry p {
+  font-size: 15px; /* Reduce text size for paragraphs */
 }
