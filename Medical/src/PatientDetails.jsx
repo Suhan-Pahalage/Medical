@@ -62,7 +62,7 @@ const PatientDetails = () => {
       )}
 
 <button
-  onClick={() => navigate("/doctor-dashboard")}
+  onClick={() => navigate("/doctor-dashboard")} // USE To go to back
   className="back-button88"
   style={{
     position: "absolute",  // To position the button in a specific place
@@ -80,12 +80,12 @@ const PatientDetails = () => {
 </button>
 
 <button
-  onClick={() => navigate("/")}
+  onClick={() => navigate("/")} // use go to main menue
   className="back-button88"
   style={{
     position: "absolute",  // To position the button in a specific place
-    top: "70px",           // Distance from the top
-    right: "20px",         // Distance from the right
+    top: "20px",           // Distance from the top
+    right: "100px",         // Distance from the right
     padding: "10px 20px",
     backgroundColor: "#2196f3", // Green background (you can change this)
     color: "white",
